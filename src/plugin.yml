@@ -1,0 +1,14 @@
+name: CustomCommands
+description: A custom commands plugin
+author: PYRRH4
+website: https://www.spigotmc.org/resources/authors/pyrrh4.70459/
+main: be.pyrrh4.customcommands.CustomCommands
+version: 2.0.0
+depend: [PyrCore]
+commands:
+  customcommands:
+    description: Custom commands
+    aliases: [ccmd]
+permissions:
+  ccmd.admin:
+    default: op

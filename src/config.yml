@@ -1,0 +1,25 @@
+# ------------------------------------------------------------ #
+# Configuration file for CustomCommands
+# ------------------------------------------------------------ #
+
+# ------------------------------------------------------------ #
+# Messages
+# Note : only languages "ENG" and "FRA" are registered by
+#  default with PyrCore. If there are anothers languages,
+#  you'll have to register them with PyrCore in this file :
+#  [server directory]/plugins/pyrrh4_plugins/config.yml
+# ------------------------------------------------------------ #
+
+msg:
+  error-permission:
+    ENG: '&4CustomCommands >> &cYou don''t have the permission to do that !'
+    FRA: '&4CustomCommands >> &cTu n''as pas la permission de faire cela !'
+  error-number:
+    ENG: '&4CustomCommands >> &cIt seems that there is an invalid number in your arguments...'
+    FRA: '&4CustomCommands >> &cLe nombre spécifié est invalide.'
+  error-target: 
+    ENG: '&4CustomCommands >> &cPlayer {player} could not be found.'
+    FRA: '&4CustomCommands >> &cLe joueur {player} n''a pas pu être trouvé.'
+  error-usage:
+    ENG: '&4CustomCommands >> &cThat''s not how you''re supposed to use the command ! Usage : {usage}'
+    FRA: '&4CustomCommands >> &cCe n''est pas la manière dont tu es supposé utiliser la commande ! Usage : {usage}'
