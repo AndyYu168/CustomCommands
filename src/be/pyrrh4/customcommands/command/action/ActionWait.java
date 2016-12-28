@@ -1,9 +1,11 @@
 package be.pyrrh4.customcommands.command.action;
 
 import java.util.List;
+import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import be.pyrrh4.customcommands.CustomCommands;
 
 public class ActionWait implements Action
 {
@@ -16,7 +18,7 @@ public class ActionWait implements Action
 			max = Integer.parseInt(data.get(0));
 		}
 		catch (Exception exception) {
-			Bukkit.getLogger().warning("[CustomCommands] Could not find the delay.");
+			CustomCommands.i.log(Level.WARNING, "Could not find the delay.");
 		}
 	}
 

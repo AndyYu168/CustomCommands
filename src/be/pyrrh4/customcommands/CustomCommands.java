@@ -3,42 +3,47 @@ package be.pyrrh4.customcommands;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 
+import be.pyrrh4.core.AbstractPlugin;
 import be.pyrrh4.core.Core;
-import be.pyrrh4.core.PyrPlugin;
-import be.pyrrh4.core.lib.command.CommandArgumentsPattern;
-import be.pyrrh4.core.lib.command.CommandCallInfo;
-import be.pyrrh4.core.lib.command.CommandHandler;
-import be.pyrrh4.core.lib.command.CommandSubHandler;
-import be.pyrrh4.core.lib.storage.ConfigFile;
+import be.pyrrh4.core.Requires;
+import be.pyrrh4.core.Setting;
+import be.pyrrh4.core.command.CommandArgumentsPattern;
+import be.pyrrh4.core.command.CommandCallInfo;
+import be.pyrrh4.core.command.CommandHandler;
+import be.pyrrh4.core.command.CommandSubHandler;
+import be.pyrrh4.core.storage.Config;
+import be.pyrrh4.core.storage.ConfigFile;
 import be.pyrrh4.core.util.UInventory;
 import be.pyrrh4.core.util.ULocation;
-import be.pyrrh4.core.util.UString;
 import be.pyrrh4.customcommands.command.CustomCommand;
 import be.pyrrh4.customcommands.command.action.ActionData;
 
-public class CustomCommands extends PyrPlugin implements Listener
+public class CustomCommands extends AbstractPlugin implements Listener
 {
 	public static CustomCommands i;
 	private CommandHandler handler;
 	public ConfigFile dataFile;
 	private ArrayList<CustomCommand> commands = new ArrayList<CustomCommand>();
 
-	public CustomCommands()
+	@Override
+	public void initialize()
 	{
-		super(true, "config.yml", "msg", null, null, "https://www.spigotmc.org/resources/14363/", false);
+		setSetting(Setting.AUTO_UPDATE_URL, "https://www.spigotmc.org/resources/14363/");
+		setSetting(Setting.HAS_STORAGE, true);
+		setSetting(Setting.CONFIG_FILE_NAME, "config.yml");
+		setSetting(Setting.CONFIG_PATH_MESSAGES, "msg");
 	}
 
 	@Override
@@ -53,8 +58,8 @@ public class CustomCommands extends PyrPlugin implements Listener
 
 		if (oldFile.exists() && !dataFile.getOrDefault("converted", false))
 		{
-			Bukkit.getLogger().info("[CustomCommands] Starting converting old data from /CustomCommands/database.yml to /pyrrh4_plugins/CustomCommands/storage.data ...");
-			YamlConfiguration old = YamlConfiguration.loadConfiguration(oldFile);
+			log(Level.INFO, "Starting converting old data from /CustomCommands/database.yml to /pyrrh4_plugins/CustomCommands/storage.data ...");
+			Config old = Config.loadConfiguration(this, oldFile);
 			int items = 0;
 			int locations = 0;
 
@@ -68,15 +73,15 @@ public class CustomCommands extends PyrPlugin implements Listener
 
 						if (item == null)
 						{
-							Bukkit.getLogger().warning("[CustomCommands] Could not load item '" + name + "' from the old database file.");
+							log(Level.WARNING, "Could not load item '" + name + "' from the old database file.");
 							continue;
 						}
 
 						dataFile.set("items." + name, UInventory.serializeItem(item));
-						Bukkit.getLogger().info("[ScrollBoard] Successfully loaded item '" + name + "' from the old database file.");
+						log(Level.INFO, "Successfully loaded item '" + name + "' from the old database file.");
 					}
 					catch (Exception exception) {
-						Bukkit.getLogger().warning("[CustomCommands] Could not load item '" + name + "' from the old database file.");
+						log(Level.WARNING, "Could not load item '" + name + "' from the old database file.");
 					}
 				}
 			}
@@ -91,21 +96,21 @@ public class CustomCommands extends PyrPlugin implements Listener
 
 						if (loc == null)
 						{
-							Bukkit.getLogger().warning("[CustomCommands] Could not load location '" + name + "' from the old database file.");
+							log(Level.WARNING, "Could not load location '" + name + "' from the old database file.");
 							continue;
 						}
 
 						dataFile.set("items." + name, ULocation.serializeLocation(loc));
-						Bukkit.getLogger().info("[ScrollBoard] Successfully loaded location '" + name + "' from the old database file.");
+						log(Level.INFO, "Successfully loaded location '" + name + "' from the old database file.");
 					}
 					catch (Exception exception) {
-						Bukkit.getLogger().warning("[CustomCommands] Could not load location '" + name + "' from the old database file.");
+						log(Level.WARNING, "Could not load location '" + name + "' from the old database file.");
 					}
 				}
 			}
 
 			dataFile.set("converted", true);
-			Bukkit.getLogger().info("[CustomCommands] Successfully converted all items and locations from the old database file. " + items + " items" + (items > 1 ? "s" : "") + " and " + locations + " arena" + (locations > 1 ? "s" : "") + " were loaded.");
+			log(Level.INFO, "Successfully converted all items and locations from the old database file. " + items + " items" + (items > 1 ? "s" : "") + " and " + locations + " arena" + (locations > 1 ? "s" : "") + " were loaded.");
 		}
 
 		// Loading commands
@@ -132,12 +137,12 @@ public class CustomCommands extends PyrPlugin implements Listener
 				}
 
 				commands.add(new CustomCommand(usage, permission, aliases, patterns, actions));
-				Bukkit.getLogger().info("[CustomCommands] Successfully registered command '" + key + "'");
+				log(Level.INFO, "Successfully registered command '" + key + "'");
 			}
 			catch(Exception exception)
 			{
 				exception.printStackTrace();
-				Bukkit.getLogger().warning("[CustomCommands] Could not load command '" + key + "'.");
+				log(Level.WARNING, "Could not load command '" + key + "'.");
 			}
 		}
 
@@ -159,26 +164,11 @@ public class CustomCommands extends PyrPlugin implements Listener
 			{
 				Player player = call.getSenderAsPlayer();
 				String name = call.getArgAsString(1);
-
-				if (!UString.isAlphanumeric(name))
-				{
-					Core.getMessenger().error(player, "CustomCommands >>", "This name isn't alphanumeric !");
-					return;
-				}
-
-				if (dataFile.update().contains("items." + name))
-				{
-					Core.getMessenger().error(player, "CustomCommands >>", "This name is already taken !");
-					return;
-				}
-
 				ItemStack item = player.getItemInHand();
 
-				if (item == null || item.getType().equals(Material.AIR))
-				{
-					Core.getMessenger().error(player, "CustomCommands >>", "This item is invalid !");
-					return;
-				}
+				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
+				if (!Requires.fileNotContains(dataFile.getLast(), "items." + name, player, "CustomCommands >>", "This name is already taken !")) return;
+				if (!Requires.itemValid(item, player, "CustomCommands >>", "This item is invalid !")) return;
 
 				dataFile.set("items." + name, UInventory.serializeItem(item));
 				Core.getMessenger().normal(player, "CustomCommands >>", "This item has been saved with name '" + name + "' !");
@@ -195,17 +185,8 @@ public class CustomCommands extends PyrPlugin implements Listener
 				Player player = call.getSenderAsPlayer();
 				String name = call.getArgAsString(1);
 
-				if (!UString.isAlphanumeric(name))
-				{
-					Core.getMessenger().error(player, "CustomCommands >>", "This name isn't alphanumeric !");
-					return;
-				}
-
-				if (dataFile.update().contains("locations." + name))
-				{
-					Core.getMessenger().error(player, "CustomCommands >>", "This name is already taken !");
-					return;
-				}
+				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
+				if (!Requires.fileNotContains(dataFile.getLast(), "locations." + name, player, "CustomCommands >>", "This name is already taken !")) return;
 
 				dataFile.set("locations." + name, ULocation.serializeLocation(player.getLocation()));
 				Core.getMessenger().normal(player, "CustomCommands >>", "This location has been saved with name '" + name + "' !");
@@ -270,7 +251,7 @@ public class CustomCommands extends PyrPlugin implements Listener
 		}
 
 		for (int i = 0; i < args.length; i++) {
-			string = string.replace("{arg:" + i + "}", args[i]);
+			string = string.replace("{arg:" + (i + 1) + "}", args[i]);
 		}
 
 		string = string.replace("{player}", sender.getName()).replace("{args}", fullArgs);

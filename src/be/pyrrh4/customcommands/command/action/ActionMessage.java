@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.lib.messenger.Replacer;
+import be.pyrrh4.core.messenger.Replacer;
 import be.pyrrh4.core.util.UBukkit;
 import be.pyrrh4.core.util.UString;
 import be.pyrrh4.customcommands.CustomCommands;

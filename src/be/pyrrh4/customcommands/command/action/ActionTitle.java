@@ -1,12 +1,13 @@
 package be.pyrrh4.customcommands.command.action;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.lib.messenger.Replacer;
-import be.pyrrh4.core.lib.messenger.internal.InternalMessenger;
+import be.pyrrh4.core.messenger.Messenger;
+import be.pyrrh4.core.messenger.Replacer;
 import be.pyrrh4.core.util.UBukkit;
 import be.pyrrh4.core.util.UString;
 import be.pyrrh4.customcommands.CustomCommands;
@@ -27,14 +28,14 @@ public class ActionTitle implements Action
 			fadeOut = Integer.parseInt(data.get(5));
 		}
 		catch (Exception exception) {
-			Bukkit.getLogger().warning("[CustomCommands] Could not find the fadeIn, duration or fadeOut.");
+			CustomCommands.i.log(Level.WARNING, "Could not find the fadeIn, duration or fadeOut.");
 			return;
 		}
 
 		// Target player
 
 		if (target.equalsIgnoreCase("player")) {
-			InternalMessenger.sendTitle(sender, null, title.replace("{receiver}", sender.getName()), subtitle.replace("{receiver}", sender.getName()), fadeIn, duration, fadeOut);
+			Messenger.sendTitle(sender, null, title.replace("{receiver}", sender.getName()), subtitle.replace("{receiver}", sender.getName()), fadeIn, duration, fadeOut);
 		}
 
 		// Target everyone
@@ -42,7 +43,7 @@ public class ActionTitle implements Action
 		else if (target.equalsIgnoreCase("everyone"))
 		{
 			for (Player pl : UBukkit.getOnlinePlayers()) {
-				InternalMessenger.sendTitle(pl, null, title.replace("{receiver}", pl.getName()), subtitle.replace("{receiver}", pl.getName()), fadeIn, duration, fadeOut);
+				Messenger.sendTitle(pl, null, title.replace("{receiver}", pl.getName()), subtitle.replace("{receiver}", pl.getName()), fadeIn, duration, fadeOut);
 			}
 		}
 
@@ -53,7 +54,7 @@ public class ActionTitle implements Action
 			try
 			{
 				Player newTarget = Bukkit.getPlayer(target);
-				InternalMessenger.sendTitle(newTarget, null, title.replace("{receiver}", newTarget.getName()), subtitle.replace("{receiver}", newTarget.getName()), fadeIn, duration, fadeOut);
+				Messenger.sendTitle(newTarget, null, title.replace("{receiver}", newTarget.getName()), subtitle.replace("{receiver}", newTarget.getName()), fadeIn, duration, fadeOut);
 			}
 			catch (Exception exception) {
 				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);

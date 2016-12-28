@@ -2,7 +2,7 @@ package be.pyrrh4.customcommands.command.action;
 
 import java.util.List;
 
-import be.pyrrh4.core.lib.storage.ConfigFile;
+import be.pyrrh4.core.storage.ConfigFile;
 
 public class ActionData
 {

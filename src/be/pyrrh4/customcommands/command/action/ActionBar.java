@@ -5,8 +5,8 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.lib.messenger.Replacer;
-import be.pyrrh4.core.lib.messenger.internal.InternalMessenger;
+import be.pyrrh4.core.messenger.Messenger;
+import be.pyrrh4.core.messenger.Replacer;
 import be.pyrrh4.core.util.UBukkit;
 import be.pyrrh4.core.util.UString;
 import be.pyrrh4.customcommands.CustomCommands;
@@ -21,7 +21,7 @@ public class ActionBar implements Action
 		// Target player
 
 		if (target.equalsIgnoreCase("player")) {
-			InternalMessenger.sendActionBar(sender, null, bar.replace("{receiver}", sender.getName()));
+			Messenger.sendActionBar(sender, null, bar.replace("{receiver}", sender.getName()));
 		}
 
 		// Target everyone
@@ -29,7 +29,7 @@ public class ActionBar implements Action
 		else if (target.equalsIgnoreCase("everyone"))
 		{
 			for (Player pl : UBukkit.getOnlinePlayers()) {
-				InternalMessenger.sendActionBar(pl, null, bar.replace("{receiver}", pl.getName()));
+				Messenger.sendActionBar(pl, null, bar.replace("{receiver}", pl.getName()));
 			}
 		}
 
@@ -40,7 +40,7 @@ public class ActionBar implements Action
 			try
 			{
 				Player newTarget = Bukkit.getPlayer(target);
-				InternalMessenger.sendActionBar(newTarget, null, bar.replace("{receiver}", newTarget.getName()));
+				Messenger.sendActionBar(newTarget, null, bar.replace("{receiver}", newTarget.getName()));
 			}
 			catch (Exception exception) {
 				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);

@@ -5,12 +5,15 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import be.pyrrh4.core.lib.command.CommandArgumentsPattern;
-import be.pyrrh4.core.lib.command.result.PatternResult;
-import be.pyrrh4.core.lib.command.result.ResultIncorrectNumber;
-import be.pyrrh4.core.lib.command.result.ResultIncorrectOther;
-import be.pyrrh4.core.lib.command.result.ResultSuccess;
-import be.pyrrh4.core.lib.messenger.Replacer;
+import be.pyrrh4.core.Requires;
+import be.pyrrh4.core.command.CommandArgumentsPattern;
+import be.pyrrh4.core.command.result.PatternResult;
+import be.pyrrh4.core.command.result.ResultIncorrectLength;
+import be.pyrrh4.core.command.result.ResultIncorrectNumber;
+import be.pyrrh4.core.command.result.ResultIncorrectOther;
+import be.pyrrh4.core.command.result.ResultIncorrectPlayer;
+import be.pyrrh4.core.command.result.ResultSuccess;
+import be.pyrrh4.core.messenger.Replacer;
 import be.pyrrh4.customcommands.CustomCommands;
 import be.pyrrh4.customcommands.command.action.Action;
 import be.pyrrh4.customcommands.command.action.ActionBar;
@@ -127,9 +130,7 @@ public class CustomCommand
 								current = new ActionTeleport(sender, data.getData(), args);
 							}
 
-							if (current == null) {
-								throw new NullPointerException("Could not find action '" + data.getType() + "'");
-							}
+							Requires.notNull(current, "Could not find action '" + data.getType() + "'");
 
 							// TODO : action change tab + other actions
 						}
@@ -150,8 +151,16 @@ public class CustomCommand
 		}
 		else if (result instanceof ResultIncorrectNumber)
 		{
-			CustomCommands.i.getMessage("error-number").send(null, sender);
+			CustomCommands.i.getMessage("error-number").send(new Replacer("{error}", args[result.getArg()]), sender);
 			return true;
+		}
+		else if (result instanceof ResultIncorrectLength)
+		{
+			CustomCommands.i.getMessage("error-length").send(new Replacer("{error}", args[result.getArg()]), sender);
+		}
+		else if (result instanceof ResultIncorrectPlayer)
+		{
+			CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", args[result.getArg()]), sender);
 		}
 		else if (result instanceof ResultIncorrectOther)
 		{
@@ -173,8 +182,9 @@ public class CustomCommand
 
 	public PatternResult argumentsMatch(String[] args)
 	{
-		if (patterns.size() == 0 && args.length == 0)
+		if (patterns.size() == 0 && args.length == 0) {
 			return new ResultSuccess();
+		}
 
 		for (CommandArgumentsPattern pattern : patterns)
 		{

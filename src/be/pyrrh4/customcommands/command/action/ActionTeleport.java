@@ -1,12 +1,13 @@
 package be.pyrrh4.customcommands.command.action;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.lib.messenger.Replacer;
+import be.pyrrh4.core.messenger.Replacer;
 import be.pyrrh4.core.util.UBukkit;
 import be.pyrrh4.core.util.ULocation;
 import be.pyrrh4.customcommands.CustomCommands;
@@ -25,13 +26,13 @@ public class ActionTeleport implements Action
 		}
 		catch (Exception exception)
 		{
-			Bukkit.getLogger().warning("[CustomCommands] Could not find the location.");
+			CustomCommands.i.log(Level.WARNING, "Could not find the location.");
 			return;
 		}
 
 		if (loc == null)
 		{
-			Bukkit.getLogger().warning("[CustomCommands] Could not find the location.");
+			CustomCommands.i.log(Level.WARNING, "Could not find the location.");
 			return;
 		}
 
