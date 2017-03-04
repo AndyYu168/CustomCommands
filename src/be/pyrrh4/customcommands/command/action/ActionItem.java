@@ -16,13 +16,13 @@ public class ActionItem implements Action
 {
 	public ActionItem(Player sender, List<String> data, String[] args)
 	{
-		String target = CustomCommands.i.replaceString(data.get(0).replace(" ", ""), sender, args);
-		String itemName = CustomCommands.i.replaceString(data.get(1).replace(" ", ""), sender, args);
+		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String itemName = CustomCommands.replaceString(data.get(1).replace(" ", ""), sender, args);
 		ItemStack item;
 
 		try
 		{
-			item = UInventory.unserializeItem(CustomCommands.i.dataFile.getOrDefault("items." + itemName, (String) null));
+			item = UInventory.unserializeItem(CustomCommands.i.dataFile.reader().getOrDefault("items." + itemName, (String) null));
 		}
 		catch (Exception exception)
 		{
@@ -66,7 +66,7 @@ public class ActionItem implements Action
 				newTarget.updateInventory();
 			}
 			catch (Exception exception) {
-				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);
+				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
 			}
 		}
 	}

@@ -1,0 +1,130 @@
+#----------------------------------------------------------------------------------------------------
+# All the custom commands
+#----------------------------------------------------------------------------------------------------
+# This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
+# similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
+#----------------------------------------------------------------------------------------------------
+
+# Exemple command : aliases to /spawn with a delay
+
+ccspawn=
+
+# Firth configuration : command usage
+# This will be displayed when a player misuses a command
+
+  usage=Usage : /ccspawn, /spawn, /teleportspawn
+
+# Second configuration : command aliases
+# When the player will do /ccspawn, /spawn or /teleportspawn, the command will be handled here
+# This is case insensivite
+
+  aliases=/
+    ccspawn
+    spawn
+    teleportspawn
+
+# Third configuration : arguments patterns that the player can use
+# 
+# In the patterns, for each arg, you can use :
+#  anything you want, so the player must enter it
+#  [string], so the player can enter anything
+#  [string:{min}:{max}], so the player can enter anything between {min} characters and {max} characters
+#  [int], so the player must enter a number
+#  [double], so the player must enter a decimal number (like 12.85 or 12,85)
+#  [infinite], so after this arg the player can enter an infinite number of arguments
+#
+# This is case insensivite
+
+  arguments_patterns=//
+
+# Fourth configuration : the permission needed to use the command
+# Just remove the line if you don't want a permission
+
+  permission=cc.spawn
+
+# Last configuration : the actions executed when the player executes the command
+#
+# Actions list :
+#
+#  type=send message
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    message line 1 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
+#    message line 2 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
+#    ...
+#
+#  type=wait x ticks
+#  data=/
+#    delay in ticks
+#
+#  type=execute commands for
+#  data=/
+#    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
+#    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
+#    ...
+#
+#  type=execute commands as
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
+#    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
+#    ...
+#
+#  type=send title
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    title (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
+#    subtitle (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
+#    fadein in ticks
+#    duration in ticks
+#    fadeout in ticks
+#
+#  type=send actionbar
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    the action bar (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
+#
+#  type=give item
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    the item name (when you saved it with /ccmd saveitem [name])
+#
+#  type=teleport
+#  data=/
+#    target ('player', 'everyone', '{arg:[NUMBER]}')
+#    the location name (when you saved it with /ccmd saveloc [name])
+
+  actions=
+    my_action_1=
+      type=send message
+      data=/
+        player
+        &cYou'll be teleported soon to spawn.
+        &cPlease, wait 3 seconds...
+    my_action_2=
+      type=wait x ticks=
+      data=/
+        60
+    my_action_3=
+      type=execute commands for
+      data=/
+        spawn {player}
+    my_action_4=
+      type=execute commands as=
+      data=/
+        player
+        me I''m now at spawn !
+    my_action_5=
+      type=send title
+      data=/
+        player
+        &7You''re at spawn !
+        &7For real !
+        10
+        80
+        10
+    my_action_6=
+      type=send actionbar
+      data=/
+        player
+        &aYOU ARE AT SPAWN !!!

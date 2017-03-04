@@ -15,11 +15,11 @@ public class ActionMessage implements Action
 {
 	public ActionMessage(Player sender, List<String> data, String[] args)
 	{
-		String target = CustomCommands.i.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
 		ArrayList<String> message = new ArrayList<String>();
 
 		for (int i = 1; i < data.size(); i++) {
-			message.add(UString.format(CustomCommands.i.replaceString(data.get(i), sender, args)));
+			message.add(UString.format(CustomCommands.replaceString(data.get(i), sender, args)));
 		}
 
 		// Target player
@@ -56,7 +56,7 @@ public class ActionMessage implements Action
 				}
 			}
 			catch (Exception exception) {
-				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);
+				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
 			}
 		}
 	}

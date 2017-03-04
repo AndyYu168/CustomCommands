@@ -15,8 +15,8 @@ public class ActionBar implements Action
 {
 	public ActionBar(Player sender, List<String> data, String[] args)
 	{
-		String target = CustomCommands.i.replaceString(data.get(0).replace(" ", ""), sender, args);
-		String bar = UString.format(CustomCommands.i.replaceString(data.get(1), sender, args));
+		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String bar = UString.format(CustomCommands.replaceString(data.get(1), sender, args));
 
 		// Target player
 
@@ -43,7 +43,7 @@ public class ActionBar implements Action
 				Messenger.sendActionBar(newTarget, null, bar.replace("{receiver}", newTarget.getName()));
 			}
 			catch (Exception exception) {
-				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);
+				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
 			}
 		}
 	}

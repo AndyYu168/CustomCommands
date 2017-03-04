@@ -16,13 +16,13 @@ public class ActionTeleport implements Action
 {
 	public ActionTeleport(Player sender, List<String> data, String[] args)
 	{
-		String target = CustomCommands.i.replaceString(data.get(0).replace(" ", ""), sender, args);
-		String locName = CustomCommands.i.replaceString(data.get(1).replace(" ", ""), sender, args);
+		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String locName = CustomCommands.replaceString(data.get(1).replace(" ", ""), sender, args);
 		Location loc;
 
 		try
 		{
-			loc = ULocation.unserializeLocation(CustomCommands.i.dataFile.getOrDefault("locations." + locName, (String) null));
+			loc = ULocation.unserializeLocation(CustomCommands.i.dataFile.reader().getOrDefault("locations." + locName, (String) null));
 		}
 		catch (Exception exception)
 		{
@@ -61,7 +61,7 @@ public class ActionTeleport implements Action
 				newTarget.teleport(loc);
 			}
 			catch (Exception exception) {
-				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);
+				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
 			}
 		}
 	}

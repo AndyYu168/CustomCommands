@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +25,9 @@ import be.pyrrh4.core.command.CommandArgumentsPattern;
 import be.pyrrh4.core.command.CommandCallInfo;
 import be.pyrrh4.core.command.CommandHandler;
 import be.pyrrh4.core.command.CommandSubHandler;
-import be.pyrrh4.core.storage.Config;
-import be.pyrrh4.core.storage.ConfigFile;
+import be.pyrrh4.core.storage.PMLConvertor;
+import be.pyrrh4.core.storage.PMLReader;
+import be.pyrrh4.core.storage.PMLWriter;
 import be.pyrrh4.core.util.UInventory;
 import be.pyrrh4.core.util.ULocation;
 import be.pyrrh4.customcommands.command.CustomCommand;
@@ -34,7 +37,7 @@ public class CustomCommands extends AbstractPlugin implements Listener
 {
 	public static CustomCommands i;
 	private CommandHandler handler;
-	public ConfigFile dataFile;
+	public PMLWriter dataFile;
 	private ArrayList<CustomCommand> commands = new ArrayList<CustomCommand>();
 
 	@Override
@@ -42,24 +45,75 @@ public class CustomCommands extends AbstractPlugin implements Listener
 	{
 		setSetting(Setting.AUTO_UPDATE_URL, "https://www.spigotmc.org/resources/14363/");
 		setSetting(Setting.HAS_STORAGE, true);
-		setSetting(Setting.CONFIG_FILE_NAME, "config.yml");
-		setSetting(Setting.CONFIG_PATH_MESSAGES, "msg");
+		setSetting(Setting.CONFIG_FILE_NAME, "config.pyrml");
 	}
 
 	@Override
 	public void enable()
 	{
 		i = this;
-		dataFile = getStorage().getConfig("storage.data");
+		config.loadTextPaths(this, "msg", null, null);
+
+		// Converting data
+
+		File f = new File(getStorage().getParentDirectory(), "config.yml");
+
+		if (f.exists())
+		{
+			PMLConvertor convertor = new PMLConvertor(this, f);
+			convertor.addPath("msg.error-permission");
+			convertor.addPath("msg.error-number");
+			convertor.addPath("msg.error-length");
+			convertor.addPath("msg.error-target");
+			convertor.addPath("msg.error-usage");
+			convertor.convert();
+		}
+
+		f = new File(getStorage().getParentDirectory(), "commands.yml");
+
+		if (f.exists())
+		{
+			PMLConvertor convertor = new PMLConvertor(this, f);
+			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(f);
+			ConfigurationSection sec = cfg.getConfigurationSection("");
+
+			if (sec != null)
+			{
+				for (String key : sec.getKeys(false))
+				{
+					convertor.addPath(key + ".usage");
+					convertor.addPath(key + ".aliases");
+					convertor.addPath(key + ".arguments-patterns");
+					convertor.addPath(key + ".permission");
+
+					ConfigurationSection sec2 = cfg.getConfigurationSection(key + ".actions");
+
+					if (sec2 != null)
+					{
+						for (String key2 : sec2.getKeys(false))
+						{
+							convertor.addPath(key + ".actions." + key2 + ".type");
+							convertor.addPath(key + ".actions." + key2 + ".data");
+						}
+					}
+				}
+			}
+
+			convertor.convert();
+		}
+
+		// Storage files
+
+		dataFile = getStorage().getPMLWriter("storage.data");
 
 		// Converting old data
 
 		File oldFile = new File(getDataFolder().getParentFile() + File.separator + "CustomCommands", "database.yml");
 
-		if (oldFile.exists() && !dataFile.getOrDefault("converted", false))
+		if (oldFile.exists() && !dataFile.reader().getOrDefault("converted", false))
 		{
 			log(Level.INFO, "Starting converting old data from /CustomCommands/database.yml to /pyrrh4_plugins/CustomCommands/storage.data ...");
-			Config old = Config.loadConfiguration(this, oldFile);
+			YamlConfiguration old = YamlConfiguration.loadConfiguration(oldFile);
 			int items = 0;
 			int locations = 0;
 
@@ -109,22 +163,22 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				}
 			}
 
-			dataFile.set("converted", true);
+			dataFile.set("converted", true).save();
 			log(Level.INFO, "Successfully converted all items and locations from the old database file. " + items + " items" + (items > 1 ? "s" : "") + " and " + locations + " arena" + (locations > 1 ? "s" : "") + " were loaded.");
 		}
 
 		// Loading commands
 
-		ConfigFile file = getStorage().getEmbeddedConfig("commands.yml");
+		PMLReader file = getStorage().getPMLReader("commands.pyrml");
 
-		for (String key : file.getLast().getConfigurationSection("").getKeys(false))
+		for (String key : file.getKeysForSection("", false))
 		{
 			try
 			{
 				List<String> aliases = file.getOrDefaultList(key + ".aliases");
 				List<CommandArgumentsPattern> patterns = new ArrayList<CommandArgumentsPattern>();
 
-				for (String pattern : file.getOrDefaultList(key + ".arguments-patterns")) {
+				for (String pattern : file.getOrDefaultList(key + ".arguments_patterns")) {
 					patterns.add(new CommandArgumentsPattern(pattern));
 				}
 
@@ -132,14 +186,14 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				String permission = file.getOrDefault(key + ".permission", null);
 				List<ActionData> actions = new ArrayList<ActionData>();
 
-				for (String path : file.getLast().getConfigurationSection(key + ".actions").getKeys(false)) {
+				for (String path : file.getKeysForSection(key + ".actions", false)) {
 					actions.add(new ActionData(file, key + ".actions." + path));
 				}
 
 				commands.add(new CustomCommand(usage, permission, aliases, patterns, actions));
 				log(Level.INFO, "Successfully registered command '" + key + "'");
 			}
-			catch(Exception exception)
+			catch (Exception exception)
 			{
 				exception.printStackTrace();
 				log(Level.WARNING, "Could not load command '" + key + "'.");
@@ -152,8 +206,12 @@ public class CustomCommands extends AbstractPlugin implements Listener
 
 		// Plugin's commands
 
-		handler = new CommandHandler("/ccmd", Core.getMessenger());
 		getCommand("customcommands").setExecutor(this);
+		handler = new CommandHandler(this, "/ccmd", Core.getMessenger());
+
+		handler.addHelp("/pyr reload CustomCommands", "reload the plugin", "pyr.core.admin");
+		handler.addHelp("/ccmd saveitem [name]", "save an item", "ccmd.admin");
+		handler.addHelp("/ccmd saveloc [name]", "save a location", "ccmd.admin");
 
 		// Command /ccmd saveitem [name]
 
@@ -167,10 +225,10 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				ItemStack item = player.getItemInHand();
 
 				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
-				if (!Requires.fileNotContains(dataFile.getLast(), "items." + name, player, "CustomCommands >>", "This name is already taken !")) return;
+				if (!Requires.fileNotContains(dataFile, "items." + name, player, "CustomCommands >>", "This name is already taken !")) return;
 				if (!Requires.itemValid(item, player, "CustomCommands >>", "This item is invalid !")) return;
 
-				dataFile.set("items." + name, UInventory.serializeItem(item));
+				dataFile.set("items." + name, UInventory.serializeItem(item)).save();
 				Core.getMessenger().normal(player, "CustomCommands >>", "This item has been saved with name '" + name + "' !");
 			}
 		});
@@ -186,9 +244,9 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				String name = call.getArgAsString(1);
 
 				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
-				if (!Requires.fileNotContains(dataFile.getLast(), "locations." + name, player, "CustomCommands >>", "This name is already taken !")) return;
+				if (!Requires.fileNotContains(dataFile, "locations." + name, player, "CustomCommands >>", "This name is already taken !")) return;
 
-				dataFile.set("locations." + name, ULocation.serializeLocation(player.getLocation()));
+				dataFile.set("locations." + name, ULocation.serializeLocation(player.getLocation())).save();
 				Core.getMessenger().normal(player, "CustomCommands >>", "This location has been saved with name '" + name + "' !");
 			}
 		});
@@ -197,24 +255,10 @@ public class CustomCommands extends AbstractPlugin implements Listener
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if (args.length == 0)
-		{
-			// TODO : /help : /ccmd
-
-			Core.getMessenger().listMessage(sender, "CustomCommands >>", "This server is running " + getDescription().getName() + " version " + getDescription().getVersion() + ".");
-
-			if (sender.hasPermission("pyr.core.admin")) {
-				Core.getMessenger().listSubMessage(sender, "  >>", "§a/pyr rl CustomCommands §7: reload the plugin");
-			}
-
-			if (sender.hasPermission("ccmd.admin"))
-			{
-				Core.getMessenger().listSubMessage(sender, "  >>", "/ccmd saveitem [name] : save an item");
-				Core.getMessenger().listSubMessage(sender, "  >>", "/ccmd saveloc [name] : save a location");
-			}
+		if (args.length == 0) {
+			handler.showHelp(sender);
 		}
-		else
-		{
+		else {
 			handler.execute(sender, args);
 		}
 
@@ -237,7 +281,7 @@ public class CustomCommands extends AbstractPlugin implements Listener
 	@Override
 	public void disable() {}
 
-	public String replaceString(String string, Player sender, String[] args)
+	public static String replaceString(String string, Player sender, String[] args)
 	{
 		String fullArgs = "";
 
@@ -259,8 +303,8 @@ public class CustomCommands extends AbstractPlugin implements Listener
 	}
 
 	@Override
-	public String getAdditionnalPasteContent()
+	public String getAdditionalPasteContent()
 	{
-		return "\n" + "Custom commands (config) : " + getStorage().getEmbeddedConfig("commands.yml").getLast().getConfigurationSection("").getKeys(false).size() + "\n" + "Custom commands (registered) : " + commands.size();
+		return "\n" + "Custom commands (config) : " + getStorage().getPMLReader("commands.pyrml").getKeysForSection("", false).size() + "\n" + "Custom commands (registered) : " + commands.size();
 	}
 }

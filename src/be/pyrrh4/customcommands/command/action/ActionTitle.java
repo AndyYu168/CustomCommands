@@ -16,9 +16,9 @@ public class ActionTitle implements Action
 {
 	public ActionTitle(Player sender, List<String> data, String[] args)
 	{
-		String target = CustomCommands.i.replaceString(data.get(0).replace(" ", ""), sender, args);
-		String title = UString.format(CustomCommands.i.replaceString(data.get(1), sender, args));
-		String subtitle = UString.format(CustomCommands.i.replaceString(data.get(2), sender, args));
+		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String title = UString.format(CustomCommands.replaceString(data.get(1), sender, args));
+		String subtitle = UString.format(CustomCommands.replaceString(data.get(2), sender, args));
 		int fadeIn, duration, fadeOut;
 
 		try
@@ -57,7 +57,7 @@ public class ActionTitle implements Action
 				Messenger.sendTitle(newTarget, null, title.replace("{receiver}", newTarget.getName()), subtitle.replace("{receiver}", newTarget.getName()), fadeIn, duration, fadeOut);
 			}
 			catch (Exception exception) {
-				CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", target), sender);
+				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
 			}
 		}
 	}

@@ -2,14 +2,14 @@ package be.pyrrh4.customcommands.command.action;
 
 import java.util.List;
 
-import be.pyrrh4.core.storage.ConfigFile;
+import be.pyrrh4.core.storage.PMLReader;
 
 public class ActionData
 {
 	private final String type;
 	private final List<String> data;
 
-	public ActionData(ConfigFile file, String fullPath)
+	public ActionData(PMLReader file, String fullPath)
 	{
 		this.type = file.getOrDefault(fullPath + ".type", null);
 		this.data = file.getOrDefaultList(fullPath + ".data");

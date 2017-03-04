@@ -1,9 +1,9 @@
-name: CustomCommands
+name: Custom_Commands
 description: A custom commands plugin
 author: PYRRH4
 website: https://www.spigotmc.org/resources/authors/pyrrh4.70459/
 main: be.pyrrh4.customcommands.CustomCommands
-version: 2.0.1
+version: 2.1.0
 depend: [PyrCore]
 commands:
   customcommands:

@@ -14,6 +14,7 @@ import be.pyrrh4.core.command.result.ResultIncorrectOther;
 import be.pyrrh4.core.command.result.ResultIncorrectPlayer;
 import be.pyrrh4.core.command.result.ResultSuccess;
 import be.pyrrh4.core.messenger.Replacer;
+import be.pyrrh4.core.util.UBukkit;
 import be.pyrrh4.customcommands.CustomCommands;
 import be.pyrrh4.customcommands.command.action.Action;
 import be.pyrrh4.customcommands.command.action.ActionBar;
@@ -85,7 +86,7 @@ public class CustomCommand
 		{
 			if (!hasPermission(sender))
 			{
-				CustomCommands.i.getMessage("error-permission").send(null, sender);
+				CustomCommands.i.config.getMessage("error_permission").send(null, sender);
 				return false;
 			}
 
@@ -151,20 +152,20 @@ public class CustomCommand
 		}
 		else if (result instanceof ResultIncorrectNumber)
 		{
-			CustomCommands.i.getMessage("error-number").send(new Replacer("{error}", args[result.getArg()]), sender);
+			CustomCommands.i.config.getMessage("error_number").send(new Replacer("{error}", args[result.getArg()]), sender);
 			return true;
 		}
 		else if (result instanceof ResultIncorrectLength)
 		{
-			CustomCommands.i.getMessage("error-length").send(new Replacer("{error}", args[result.getArg()]), sender);
+			CustomCommands.i.config.getMessage("error_length").send(new Replacer("{error}", args[result.getArg()]), sender);
 		}
 		else if (result instanceof ResultIncorrectPlayer)
 		{
-			CustomCommands.i.getMessage("error-target").send(new Replacer("{player}", args[result.getArg()]), sender);
+			CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", args[result.getArg()]), sender);
 		}
 		else if (result instanceof ResultIncorrectOther)
 		{
-			CustomCommands.i.getMessage("error-usage").send(new Replacer("{usage}", usage), sender);
+			CustomCommands.i.config.getMessage("error_usage").send(new Replacer("{usage}", usage), sender);
 			return true;
 		}
 
@@ -177,7 +178,7 @@ public class CustomCommand
 			return true;
 		}
 
-		return player.isOp() || player.hasPermission(permission);
+		return UBukkit.hasPermission(player, permission);
 	}
 
 	public PatternResult argumentsMatch(String[] args)
