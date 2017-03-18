@@ -1,14 +1,11 @@
 # CustomCommands
+###The easiest way to create UNLIMITED custom commands! (1.7.X -> 1.11.X)
 
-##The easiest way to create UNLIMITED custom commands! (1.7.X -> 1.11.X)
+by [pyrrh4](https://www.spigotmc.org/members/pyrrh4.70459/)
 
-
-**Plugin on Spigot_>>** https://www.spigotmc.org/resources/14363/
-
-**Contributor______>>** https://www.spigotmc.org/members/paz.175550/
-
-**Creator__________>>** https://www.spigotmc.org/members/pyrrh4.70459/
+[On Spigot](https://www.spigotmc.org/resources/14363/)
 
 
-> This plugin is actually amazing! With time (and more people helping him on github) this will be great. I've already helped somewhat on github.
-> - Paz
+CONTRIBUTORS:
+
+[Paz](https://www.spigotmc.org/members/paz.175550/)
