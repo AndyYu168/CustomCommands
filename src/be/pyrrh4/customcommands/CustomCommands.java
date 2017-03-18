@@ -191,12 +191,12 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				}
 
 				commands.add(new CustomCommand(usage, permission, aliases, patterns, actions));
-				log(Level.INFO, "Successfully registered command '" + key + "'");
+				log(Level.INFO, "Successfully registered custom command '" + key + "'");
 			}
 			catch (Exception exception)
 			{
 				exception.printStackTrace();
-				log(Level.WARNING, "Could not load command '" + key + "'.");
+				log(Level.WARNING, "Could not load custom command '" + key + "'.");
 			}
 		}
 
@@ -210,12 +210,12 @@ public class CustomCommands extends AbstractPlugin implements Listener
 		handler = new CommandHandler(this, "/ccmd", Core.getMessenger());
 
 		handler.addHelp("/pyr reload CustomCommands", "reload the plugin", "pyr.core.admin");
-		handler.addHelp("/ccmd saveitem [name]", "save an item", "ccmd.admin");
-		handler.addHelp("/ccmd saveloc [name]", "save a location", "ccmd.admin");
+		handler.addHelp("/customcommands saveitem [name]", "save an item", "customcommands.admin");
+		handler.addHelp("/customcommands saveloc [name]", "save a location", "customcommands.admin");
 
 		// Command /ccmd saveitem [name]
 
-		handler.addSubCommand(new CommandSubHandler(true, true, "ccmd.admin", new CommandArgumentsPattern("saveitem [string]"))
+		handler.addSubCommand(new CommandSubHandler(true, true, "customcommands.admin", new CommandArgumentsPattern("saveitem [string]"))
 		{
 			@Override
 			public void execute(CommandCallInfo call)
@@ -224,18 +224,18 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				String name = call.getArgAsString(1);
 				ItemStack item = player.getItemInHand();
 
-				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
-				if (!Requires.fileNotContains(dataFile, "items." + name, player, "CustomCommands >>", "This name is already taken !")) return;
-				if (!Requires.itemValid(item, player, "CustomCommands >>", "This item is invalid !")) return;
+				if (!Requires.stringAlphanumeric(name, player, "[CustomCommands]", "This name isn't alphanumeric!")) return;
+				if (!Requires.fileNotContains(dataFile, "items." + name, player, "[CustomCommands]", "This name is already taken!")) return;
+				if (!Requires.itemValid(item, player, "[CustomCommands]", "This item is invalid!")) return;
 
 				dataFile.set("items." + name, UInventory.serializeItem(item)).save();
-				Core.getMessenger().normal(player, "CustomCommands >>", "This item has been saved with name '" + name + "' !");
+				Core.getMessenger().normal(player, "[CustomCommands]", "This item has been saved with name '" + name + "' !");
 			}
 		});
 
 		// Command /ccmd saveloc [name]
 
-		handler.addSubCommand(new CommandSubHandler(true, true, "ccmd.admin", new CommandArgumentsPattern("saveloc [string]"))
+		handler.addSubCommand(new CommandSubHandler(true, true, "customcommands.admin", new CommandArgumentsPattern("saveloc [string]"))
 		{
 			@Override
 			public void execute(CommandCallInfo call)
@@ -243,11 +243,11 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				Player player = call.getSenderAsPlayer();
 				String name = call.getArgAsString(1);
 
-				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
-				if (!Requires.fileNotContains(dataFile, "locations." + name, player, "CustomCommands >>", "This name is already taken !")) return;
+				if (!Requires.stringAlphanumeric(name, player, "[CustomCommands]", "This name isn't alphanumeric !")) return;
+				if (!Requires.fileNotContains(dataFile, "locations." + name, player, "[CustomCommands]", "This name is already taken !")) return;
 
 				dataFile.set("locations." + name, ULocation.serializeLocation(player.getLocation())).save();
-				Core.getMessenger().normal(player, "CustomCommands >>", "This location has been saved with name '" + name + "' !");
+				Core.getMessenger().normal(player, "[CustomCommands]", "This location has been saved with name '" + name + "' !");
 			}
 		});
 	}
