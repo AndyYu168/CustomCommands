@@ -4,19 +4,40 @@
 # This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
 # similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
 #----------------------------------------------------------------------------------------------------
-
-# ------------------------------------------------------------ #
+# Tutorial by user 'xPaz': https://www.spigotmc.org/members/paz.175550/
+#------------------------------------------------------------- #
 # Messages
-# ------------------------------------------------------------ #
+#------------------------------------------------------------- #
+
+#It's self-explanatory. Just enter in what you want it to say if the player doesn't have
+#permissions for the command, too many arguments, etc etc.
+
+#COLOUR CODES!
+#&aLime
+#&bLight Blue
+#&cLight Red
+#&dDark Purple
+#&eLight Yellow
+#&fWhite
+#&0Black
+#&9Blue
+#&8Dark Grey
+#&7Grey
+#&6Gold (Yellow)
+#&5Light Purple
+#&4Dark Red
+#&3Light-ish blue
+#&2Dark Green
+#&1Dark Blue
 
 msg=
-  error_permission=&4CustomCommands >> &cYou don't have the permission to do that !
-#	FRA_ &4CustomCommands >> &cTu n'as pas la permission de faire cela !
-  error_number=&4CustomCommands >> &cError : '{error}' is not a valid number !
-#	FRA_ &4CustomCommands >> &cErreur : '{error}' n'est pas un nombre valide !
-  error_length=&4CustomCommands >> &cError : '{error}' exceed the allowed size !
-#	FRA_ &4CustomCommands >> &cErreur : '{error}' dépasse la taille maximale !
-  error_target=&4CustomCommands >> &cPlayer '{player}' could not be found.
-#	FRA_ &4CustomCommands >> &cLe joueur '{player}' n'a pas pu être trouvé.
-  error_usage=&4CustomCommands >> &cThat's not how you're supposed to use the command ! Usage : {usage}
-#	FRA_ &4CustomCommands >> &cCe n'est pas la manière dont tu es supposé utiliser la commande ! Usage : {usage}
+  error_permission=&4[CustomCommands] &cYou do not have sufficient permissions for this command.
+#	FRA_ &4[CustomCommands] &cTu n'as pas la permission de faire cela !
+  error_number=&4[CustomCommands] &cError: '{error}' is not a valid number.
+#	FRA_ &4[CustomCommands] &cErreur : '{error}' n'est pas un nombre valide !
+  error_length=&4[CustomCommands] &cError: '{error}' is too big/long.
+#	FRA_ &4[CustomCommands] &cErreur : '{error}' dépasse la taille maximale !
+  error_target=&4[CustomCommands] &cPlayer '{player}' could not be found.
+#	FRA_ &4[CustomCommands] &cLe joueur '{player}' n'a pas pu être trouvé.
+  error_usage=&4[CustomCommands] &cToo many arguments! Use it like this: &a{usage}
+#	FRA_ &4[CustomCommands] &cCe n'est pas la manière dont tu es supposé utiliser la commande ! Usage : {usage}
