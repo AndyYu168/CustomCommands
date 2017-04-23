@@ -5,18 +5,18 @@
 # similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
 #----------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------------------ #
+#------------------------------------------------------------- #
 # Messages
-# ------------------------------------------------------------ #
+#------------------------------------------------------------- #
 
 msg=
-  error_permission=&4CustomCommands >> &cYou don't have the permission to do that !
-#	FRA_ &4CustomCommands >> &cTu n'as pas la permission de faire cela !
-  error_number=&4CustomCommands >> &cError : '{error}' is not a valid number !
-#	FRA_ &4CustomCommands >> &cErreur : '{error}' n'est pas un nombre valide !
-  error_length=&4CustomCommands >> &cError : '{error}' exceed the allowed size !
-#	FRA_ &4CustomCommands >> &cErreur : '{error}' dépasse la taille maximale !
-  error_target=&4CustomCommands >> &cPlayer '{player}' could not be found.
-#	FRA_ &4CustomCommands >> &cLe joueur '{player}' n'a pas pu être trouvé.
-  error_usage=&4CustomCommands >> &cThat's not how you're supposed to use the command ! Usage : {usage}
-#	FRA_ &4CustomCommands >> &cCe n'est pas la manière dont tu es supposé utiliser la commande ! Usage : {usage}
+  error_permission=&4[CustomCommands] &cYou do not have sufficient permissions for this command.
+#	FRA_ &4[CustomCommands] &cTu n'as pas la permission de faire cela !
+  error_number=&4[CustomCommands] &cError: '{error}' is not a valid number.
+#	FRA_ &4[CustomCommands] &cErreur : '{error}' n'est pas un nombre valide !
+  error_length=&4[CustomCommands] &cError: '{error}' is too big/long.
+#	FRA_ &4[CustomCommands] &cErreur : '{error}' dépasse la taille maximale !
+  error_target=&4[CustomCommands] &cPlayer '{player}' could not be found.
+#	FRA_ &4[CustomCommands] &cLe joueur '{player}' n'a pas pu être trouvé.
+  error_usage=&4[CustomCommands] &cToo many arguments! Use it like this: &a{usage}
+#	FRA_ &4[CustomCommands] &cCe n'est pas la manière dont tu es supposé utiliser la commande ! Usage : {usage}

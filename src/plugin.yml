@@ -1,5 +1,5 @@
-name: Custom_Commands
-description: A custom commands plugin
+name: CustomCommands
+description: The easiest, and most feature packed Custom Commands plugin!
 author: PYRRH4
 website: https://www.spigotmc.org/resources/authors/pyrrh4.70459/
 main: be.pyrrh4.customcommands.CustomCommands
@@ -10,5 +10,5 @@ commands:
     description: Custom commands
     aliases: [ccmd]
 permissions:
-  ccmd.admin:
+  customcommands.admin:
     default: op
