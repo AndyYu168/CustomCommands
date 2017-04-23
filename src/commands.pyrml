@@ -1,18 +1,15 @@
 #----------------------------------------------------------------------------------------------------
-# Configuration for your Custom Commands
+# Configuration for your custom commands
 #----------------------------------------------------------------------------------------------------
 # This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
 # similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
-#----------------------------------------------------------------------------------------------------
-# Tutorial by user 'xPaz' - https://www.spigotmc.org/members/paz.175550/
 #----------------------------------------------------------------------------------------------------
 
 # Example: A [/spawn] command utilizing all the features of the plugin.
 # Most configuration options are case insensitive, excluding the messages etc..
 
-# Command name.
+# Command name
 ccspawn=
-
 
 # Usage of your command - Will be displayed if the player adds extra arguments to your command.
   usage=Usage : /ccspawn, /spawn, /teleportspawn
@@ -36,8 +33,8 @@ ccspawn=
 # Usable example: =//[string] [int]
 # If you set your command to output arg1 and arg2 by using the {arg:NUMBER} placeholder
 # and your command will output all the arguments as a message, this will show up in chat
-# if they entered the command /command THISISATEXTSTRING 109293 .
-# THISISATEXTSTRING 102293
+# If they entered the command /command aWord 109293
+# aWord 102293
   arguments_patterns=//
 
 #Permission required to use command. Comment out by putting a '#' infront of it
@@ -53,7 +50,7 @@ ccspawn=
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    message line 1 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
 #    message line 2 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
-#    ...etc
+#    ... etc
 
 #  type=wait x ticks
 #  data=/
@@ -63,14 +60,14 @@ ccspawn=
 #  data=/
 #    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
 #    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
-#    ...etc
+#    ... etc
 
 #  type=execute commands as
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
 #    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
-#    ...etc
+#    ... etc
 
 #  type=send title
 #  data=/
@@ -130,5 +127,3 @@ ccspawn=
       data=/
         player
         &aYOU ARE AT SPAWN !!!
-#That's it! You should know how to create a Custom Command using this plugin now.
-#END OF CONFIG
