@@ -8,7 +8,7 @@ depend: [PyrCore]
 commands:
   customcommands:
     description: Custom commands
-    aliases: [ccmd,cc,customcmd,ccmds,customcmds]
+    aliases: [ccmd]
 permissions:
   customcommands.admin:
     default: op
