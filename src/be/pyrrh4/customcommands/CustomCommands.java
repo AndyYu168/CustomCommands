@@ -224,12 +224,12 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				String name = call.getArgAsString(1);
 				ItemStack item = player.getItemInHand();
 
-				if (!Requires.stringAlphanumeric(name, player, "[CustomCommands]", "This name isn't alphanumeric!")) return;
-				if (!Requires.fileNotContains(dataFile, "items." + name, player, "[CustomCommands]", "This name is already taken!")) return;
-				if (!Requires.itemValid(item, player, "[CustomCommands]", "This item is invalid!")) return;
+				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric!")) return;
+				if (!Requires.fileNotContains(dataFile, "items." + name, player, "CustomCommands >>", "This name is already taken!")) return;
+				if (!Requires.itemValid(item, player, "CustomCommands >>", "This item is invalid!")) return;
 
 				dataFile.set("items." + name, UInventory.serializeItem(item)).save();
-				Core.getMessenger().normal(player, "[CustomCommands]", "This item has been saved with name '" + name + "' !");
+				Core.getMessenger().normal(player, "CustomCommands >>", "This item has been saved with name '" + name + "' !");
 			}
 		});
 
@@ -243,11 +243,11 @@ public class CustomCommands extends AbstractPlugin implements Listener
 				Player player = call.getSenderAsPlayer();
 				String name = call.getArgAsString(1);
 
-				if (!Requires.stringAlphanumeric(name, player, "[CustomCommands]", "This name isn't alphanumeric !")) return;
-				if (!Requires.fileNotContains(dataFile, "locations." + name, player, "[CustomCommands]", "This name is already taken !")) return;
+				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric !")) return;
+				if (!Requires.fileNotContains(dataFile, "locations." + name, player, "CustomCommands >>", "This name is already taken !")) return;
 
 				dataFile.set("locations." + name, ULocation.serializeLocation(player.getLocation())).save();
-				Core.getMessenger().normal(player, "[CustomCommands]", "This location has been saved with name '" + name + "' !");
+				Core.getMessenger().normal(player, "CustomCommands >>", "This location has been saved with name '" + name + "' !");
 			}
 		});
 	}
