@@ -4,31 +4,10 @@
 # This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
 # similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
 #----------------------------------------------------------------------------------------------------
-# Tutorial by user 'xPaz': https://www.spigotmc.org/members/paz.175550/
+
 #------------------------------------------------------------- #
 # Messages
 #------------------------------------------------------------- #
-
-#It's self-explanatory. Just enter in what you want it to say if the player doesn't have
-#permissions for the command, too many arguments, etc etc.
-
-#COLOUR CODES!
-#&aLime
-#&bLight Blue
-#&cLight Red
-#&dDark Purple
-#&eLight Yellow
-#&fWhite
-#&0Black
-#&9Blue
-#&8Dark Grey
-#&7Grey
-#&6Gold (Yellow)
-#&5Light Purple
-#&4Dark Red
-#&3Light-ish blue
-#&2Dark Green
-#&1Dark Blue
 
 msg=
   error_permission=&4[CustomCommands] &cYou do not have sufficient permissions for this command.
