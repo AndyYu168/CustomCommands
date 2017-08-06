@@ -1,69 +1,63 @@
 package be.pyrrh4.customcommands.command.action;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.messenger.Replacer;
-import be.pyrrh4.core.util.UBukkit;
-import be.pyrrh4.core.util.UString;
+import be.pyrrh4.core.util.Utils;
 import be.pyrrh4.customcommands.CustomCommands;
 
 public class ActionMessage implements Action
 {
-	public ActionMessage(Player sender, List<String> data, String[] args)
+	// ------------------------------------------------------------
+	// Constructor
+	// ------------------------------------------------------------
+
+	public ActionMessage(Player sender, ArrayList<String> data, String[] args)
 	{
-		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
+		String target = CustomCommands.instance().replaceString(data.get(0).replace(" ", ""), sender, args);
 		ArrayList<String> message = new ArrayList<String>();
 
-		for (int i = 1; i < data.size(); i++) {
-			message.add(UString.format(CustomCommands.replaceString(data.get(i), sender, args)));
+		for (int i = 1; i < data.size(); i++)
+		{
+			String str = Utils.format(CustomCommands.instance().replaceString(data.get(i), sender, args));
+			message.add(Utils.format(Utils.fillPAPI(sender, str)));
 		}
 
-		// Target player
-
-		if (target.equalsIgnoreCase("player"))
-		{
+		// target player
+		if (target.equalsIgnoreCase("player")) {
 			for (String str : message) {
-				sender.sendMessage(str.replace("{receiver}", sender.getName()));
+				sender.sendMessage(str.replace("$RECEIVER", sender.getName()));
 			}
 		}
-
-		// Target everyone
-
-		else if (target.equalsIgnoreCase("everyone"))
-		{
-			for (Player pl : UBukkit.getOnlinePlayers())
-			{
+		// target everyone
+		else if (target.equalsIgnoreCase("everyone")) {
+			for (Player pl : Utils.getOnlinePlayers()) {
 				for (String str : message) {
-					pl.sendMessage(str.replace("{receiver}", pl.getName()));
+					pl.sendMessage(str.replace("$RECEIVER", pl.getName()));
 				}
 			}
 		}
-
-		// Target player in argument
-
-		else
-		{
-			try
-			{
-				Player newTarget = Bukkit.getPlayer(target);
-
+		// target player in argument
+		else {
+			try {
+				Player newTarget = Utils.getPlayer(target);
 				for (String str : message) {
-					newTarget.sendMessage(str.replace("{receiver}", newTarget.getName()));
+					newTarget.sendMessage(str.replace("$RECEIVER", newTarget.getName()));
 				}
-			}
-			catch (Exception exception) {
-				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
+			} catch (Exception exception) {
+				exception.printStackTrace();
+				CustomCommands.instance().getLocale().getMessage("error_target").send(sender, "$PLAYER", target);
 			}
 		}
 	}
 
+	// ------------------------------------------------------------
+	// Override
+	// ------------------------------------------------------------
+
 	@Override
-	public boolean isOver()
-	{
+	public boolean isOver() {
 		return true;
 	}
 }

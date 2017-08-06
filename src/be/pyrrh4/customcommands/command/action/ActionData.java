@@ -1,27 +1,38 @@
 package be.pyrrh4.customcommands.command.action;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import be.pyrrh4.core.storage.PMLReader;
+import be.pyrrh4.core.storage.PMLConfiguration;
 
 public class ActionData
 {
-	private final String type;
-	private final List<String> data;
+	// ------------------------------------------------------------
+	// Fields and constructor
+	// ------------------------------------------------------------
 
-	public ActionData(PMLReader file, String fullPath)
+	private String path, type;
+	private ArrayList<String> data;
+
+	public ActionData(PMLConfiguration file, String path)
 	{
-		this.type = file.getOrDefault(fullPath + ".type", null);
-		this.data = file.getOrDefaultList(fullPath + ".data");
+		this.path = path;
+		this.type = file.getString(path + ".type");
+		this.data = file.getList(path + ".data");
 	}
 
-	public String getType()
-	{
+	// ------------------------------------------------------------
+	// Methods
+	// ------------------------------------------------------------
+
+	public String getPath() {
+		return path;
+	}
+
+	public String getType() {
 		return type;
 	}
 
-	public List<String> getData()
-	{
+	public ArrayList<String> getData() {
 		return data;
 	}
 }

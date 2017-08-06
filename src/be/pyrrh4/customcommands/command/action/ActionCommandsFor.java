@@ -1,16 +1,21 @@
 package be.pyrrh4.customcommands.command.action;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import be.pyrrh4.core.util.Utils;
 import be.pyrrh4.customcommands.CustomCommands;
 
 public class ActionCommandsFor implements Action
 {
-	public ActionCommandsFor(final Player sender, final List<String> data, final String[] args)
+	// ------------------------------------------------------------
+	// Constructor
+	// ------------------------------------------------------------
+
+	public ActionCommandsFor(final Player sender, final ArrayList<String> data, final String[] args)
 	{
 		// Resync
 
@@ -19,16 +24,20 @@ public class ActionCommandsFor implements Action
 			@Override
 			public void run()
 			{
+				// execute commands
 				for (int i = 0; i < data.size(); i++) {
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), CustomCommands.replaceString(data.get(i), sender, args));
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.format(Utils.fillPAPI(sender, CustomCommands.instance().replaceString(data.get(i), sender, args))));
 				}
 			}
-		}.runTask(CustomCommands.i);
+		}.runTask(CustomCommands.instance());
 	}
 
+	// ------------------------------------------------------------
+	// Override : is over
+	// ------------------------------------------------------------
+
 	@Override
-	public boolean isOver()
-	{
+	public boolean isOver() {
 		return true;
 	}
 }

@@ -1,79 +1,64 @@
 package be.pyrrh4.customcommands.command.action;
 
-import java.util.List;
-import java.util.logging.Level;
+import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import be.pyrrh4.core.messenger.Replacer;
-import be.pyrrh4.core.util.UBukkit;
-import be.pyrrh4.core.util.UInventory;
+import be.pyrrh4.core.Logger;
+import be.pyrrh4.core.Logger.Level;
+import be.pyrrh4.core.util.Utils;
 import be.pyrrh4.customcommands.CustomCommands;
+import be.pyrrh4.customcommands.MainData;
 
 public class ActionItem implements Action
 {
-	public ActionItem(Player sender, List<String> data, String[] args)
+	// ------------------------------------------------------------
+	// Constructor
+	// ------------------------------------------------------------
+
+	public ActionItem(Player sender, ArrayList<String> data, String[] args)
 	{
-		String target = CustomCommands.replaceString(data.get(0).replace(" ", ""), sender, args);
-		String itemName = CustomCommands.replaceString(data.get(1).replace(" ", ""), sender, args);
-		ItemStack item;
+		String target = CustomCommands.instance().replaceString(data.get(0).replace(" ", ""), sender, args);
+		String itemName = CustomCommands.instance().replaceString(data.get(1).replace(" ", ""), sender, args);
+		MainData mainData = CustomCommands.instance().getMainData();
+		ItemStack item = mainData.getItems().get(itemName);
 
-		try
-		{
-			item = UInventory.unserializeItem(CustomCommands.i.dataFile.reader().getOrDefault("items." + itemName, (String) null));
-		}
-		catch (Exception exception)
-		{
-			CustomCommands.i.log(Level.WARNING, "Could not find the item.");
+		if (item == null) {
+			Logger.log(Level.WARNING, CustomCommands.instance(), "Could not find the item.");
 			return;
 		}
 
-		if (item == null)
-		{
-			CustomCommands.i.log(Level.WARNING, "Could not find the item.");
-			return;
-		}
-
-		// Target player
-
-		if (target.equalsIgnoreCase("player"))
-		{
+		// rarget player
+		if (target.equalsIgnoreCase("player")) {
 			sender.getInventory().addItem(item);
 			sender.updateInventory();
 		}
-
-		// Target everyone
-
-		else if (target.equalsIgnoreCase("everyone"))
-		{
-			for (Player pl : UBukkit.getOnlinePlayers())
-			{
+		// target everyone
+		else if (target.equalsIgnoreCase("everyone")) {
+			for (Player pl : Utils.getOnlinePlayers()) {
 				pl.getInventory().addItem(item);
 				pl.updateInventory();
 			}
 		}
-
 		// Target player in argument
-
-		else
-		{
-			try
-			{
-				Player newTarget = Bukkit.getPlayer(target);
+		else {
+			try {
+				Player newTarget = Utils.getPlayer(target);
 				newTarget.getInventory().addItem(item);
 				newTarget.updateInventory();
-			}
-			catch (Exception exception) {
-				CustomCommands.i.config.getMessage("error_target").send(new Replacer("{player}", target), sender);
+			} catch (Exception exception) {
+				CustomCommands.instance().getLocale().getMessage("error_target").send(sender, "$PLAYER", target);
 			}
 		}
 	}
 
+	// ------------------------------------------------------------
+	// Override : is over
+	// ------------------------------------------------------------
+
 	@Override
-	public boolean isOver()
-	{
+	public boolean isOver() {
 		return true;
 	}
 }

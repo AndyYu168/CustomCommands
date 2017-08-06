@@ -61,3 +61,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# Applications
+# =========================
+.gitdesktop
+.scompilerx
+src/be/pyrrh4/customcommands/CustomCommands.java
+src/plugin.yml

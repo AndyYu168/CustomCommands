@@ -2,49 +2,38 @@ package be.pyrrh4.customcommands.command.action;
 
 import java.util.ArrayList;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import be.pyrrh4.core.Logger;
-import be.pyrrh4.core.Logger.Level;
+import be.pyrrh4.core.messenger.Messenger;
 import be.pyrrh4.core.util.Utils;
 import be.pyrrh4.customcommands.CustomCommands;
-import be.pyrrh4.customcommands.MainData;
 
-public class ActionTeleport implements Action
+public class ActionTab implements Action
 {
 	// ------------------------------------------------------------
 	// Constructor
 	// ------------------------------------------------------------
 
-	public ActionTeleport(Player sender, ArrayList<String> data, String[] args)
+	public ActionTab(Player sender, ArrayList<String> data, String[] args)
 	{
 		String target = CustomCommands.instance().replaceString(data.get(0).replace(" ", ""), sender, args);
-		String locName = CustomCommands.instance().replaceString(data.get(1).replace(" ", ""), sender, args);
-		MainData mainData = CustomCommands.instance().getMainData();
-		Location loc = mainData.getLocations().get(locName);
-
-		if (loc == null)
-		{
-			Logger.log(Level.WARNING, CustomCommands.instance(), "Could not find the location.");
-			return;
-		}
+		String header = Utils.fillPAPI(sender, Utils.format(CustomCommands.instance().replaceString(data.get(1), sender, args))), footer = Utils.fillPAPI(sender, Utils.format(CustomCommands.instance().replaceString(data.get(2), sender, args)));
 
 		// target player
 		if (target.equalsIgnoreCase("player")) {
-			sender.teleport(loc);
+			Messenger.tab(sender, header.replace("$RECEIVER", sender.getName()), footer.replace("$RECEIVER", sender.getName()));
 		}
 		// target everyone
 		else if (target.equalsIgnoreCase("everyone")) {
 			for (Player pl : Utils.getOnlinePlayers()) {
-				pl.teleport(loc);
+				Messenger.tab(pl, header.replace("$RECEIVER", pl.getName()), footer.replace("$RECEIVER", pl.getName()));
 			}
 		}
 		// target player in argument
 		else {
 			try {
 				Player newTarget = Utils.getPlayer(target);
-				newTarget.teleport(loc);
+				Messenger.tab(newTarget, header.replace("$RECEIVER", newTarget.getName()), footer.replace("$RECEIVER", newTarget.getName()));
 			} catch (Exception exception) {
 				CustomCommands.instance().getLocale().getMessage("error_target").send(sender, "$PLAYER", target);
 			}

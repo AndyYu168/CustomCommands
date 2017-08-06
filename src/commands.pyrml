@@ -1,30 +1,27 @@
 #----------------------------------------------------------------------------------------------------
-# All the custom commands
+# Configuration for your custom commands
 #----------------------------------------------------------------------------------------------------
 # This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
 # similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
 #----------------------------------------------------------------------------------------------------
 
-# Exemple command : aliases to /spawn with a delay
+# Example: A [/spawn] command utilizing all the features of the plugin.
+# Most configuration options are case insensitive, excluding the messages etc..
 
+# Command name
 ccspawn=
 
-# Firth configuration : command usage
-# This will be displayed when a player misuses a command
-
+# Usage of your command - Will be displayed if the player adds extra arguments to your command.
   usage=Usage : /ccspawn, /spawn, /teleportspawn
 
-# Second configuration : command aliases
-# When the player will do /ccspawn, /spawn or /teleportspawn, the command will be handled here
-# This is case insensivite
-
+#What players can type to use your command - include command name if you thought that was the way to use your command.
   aliases=/
     ccspawn
     spawn
     teleportspawn
 
-# Third configuration : arguments patterns that the player can use
-# 
+# Usable arguments for your command (eg: /command arg1 arg2 arg3)
+
 # In the patterns, for each arg, you can use :
 #  anything you want, so the player must enter it
 #  [string], so the player can enter anything
@@ -32,44 +29,46 @@ ccspawn=
 #  [int], so the player must enter a number
 #  [double], so the player must enter a decimal number (like 12.85 or 12,85)
 #  [infinite], so after this arg the player can enter an infinite number of arguments
-#
-# This is case insensivite
 
+# Usable example: =//[string] [int]
+# If you set your command to output arg1 and arg2 by using the {arg:NUMBER} placeholder
+# and your command will output all the arguments as a message, this will show up in chat
+# If they entered the command /command aWord 109293
+# aWord 102293
   arguments_patterns=//
 
-# Fourth configuration : the permission needed to use the command
-# Just remove the line if you don't want a permission
-
+#Permission required to use command. Comment out by putting a '#' infront of it
+#if you dont want a permission to be required to use your command.
   permission=cc.spawn
 
-# Last configuration : the actions executed when the player executes the command
-#
-# Actions list :
-#
+#Actions that happen when the command is executed.
+
+#Here is a list of some that you can use:
+
 #  type=send message
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    message line 1 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
 #    message line 2 (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
-#    ...
-#
+#    ... etc
+
 #  type=wait x ticks
 #  data=/
 #    delay in ticks
-#
+
 #  type=execute commands for
 #  data=/
 #    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
 #    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
-#    ...
-#
+#    ... etc
+
 #  type=execute commands as
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    command 1 (placeholders : {args}, {player}, {arg:NUMBER})
 #    command 2 (placeholders : {args}, {player}, {arg:NUMBER})
-#    ...
-#
+#    ... etc
+
 #  type=send title
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
@@ -78,17 +77,17 @@ ccspawn=
 #    fadein in ticks
 #    duration in ticks
 #    fadeout in ticks
-#
+
 #  type=send actionbar
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    the action bar (placeholders : {args}, {player}, {receiver}, {arg:NUMBER})
-#
+
 #  type=give item
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')
 #    the item name (when you saved it with /ccmd saveitem [name])
-#
+
 #  type=teleport
 #  data=/
 #    target ('player', 'everyone', '{arg:[NUMBER]}')

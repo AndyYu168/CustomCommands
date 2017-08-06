@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------------------------------
+# Configuration file for CustomCommands.
+# Open it with Notepad++, and use Language > Makefile to get the colors !
+#----------------------------------------------------------------------------------------------------
+# This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
+# similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
+#----------------------------------------------------------------------------------------------------
+
+# Locale
+
+locale=customcommands_en_US.pyrml

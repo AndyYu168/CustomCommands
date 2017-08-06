@@ -1,0 +1,243 @@
+#----------------------------------------------------------------------------------------------------
+# Configuration for your custom commands
+# Open it with Notepad++, and use Language > Makefile to get the colors !
+#----------------------------------------------------------------------------------------------------
+# This is a Pyr Markup Language file (.pyrml). It's a brand new markup language system which is
+# similar but simpler than YML. Tutorial : https://www.spigotmc.org/wiki/pyrml-tutorial/
+#----------------------------------------------------------------------------------------------------
+# Main concept : argument
+#   An argument is something that can be performed by the player
+#   Configurations details and description (see the examples below to understand exactly what it does)
+#   - (mandatory) aliases (list) : all the aliases the player can type to use your argument. The first alias of the list is the one that will be used in display texts (for example, help).
+#   - (mandatory) description (text) : a description of the argument (display use only)
+#   - (optional) permission (text) : a permission required to use the argument
+#   - (optional) parameters (list) : the parameters that the argument can take. It can be :
+#                  - a number : [integer]
+#                  - a decimal number : [double]
+#                  - a player : [player]
+#                  - an online player : [player-online]
+#                  - a string : [string]
+#                  - a sized string : [string:{min}:{max}]
+#                  - or any text
+#      -> Warning : parameters are not children ! Children come below
+#   - (optional) parameters_description (list) : a description of the parameters (display use only)
+#   - (optional) perform (section) : a list of actions (see details below) that will be executed when the player runs the argument
+#   - (optional) children (section) : a list of children arguments. Children can have children that can have children and so on !
+# The ROOT command (the first thing the player has to type, with the /, is considered as an argument as well)
+#----------------------------------------------------------------------------------------------------
+# Actions that you can use :
+#
+#  type=send message
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    message line 1 (placeholders : $ARGS, $PLAYER, $RECEIVER, $ARG:NUMBER)
+#    message line 2 (placeholders : $ARGS, $PLAYER, $RECEIVER, $ARG:NUMBER)
+#    ... etc
+#
+#  type=wait ticks
+#  data=/
+#    delay in ticks
+#
+#  type=execute commands for
+#  data=/
+#    command 1 (placeholders : $ARGS, $PLAYER, $ARG:NUMBER)
+#    command 2 (placeholders : $ARGS, $PLAYER, $ARG:NUMBER)
+#    ... etc
+#
+#  type=execute commands as
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    command 1 (placeholders : $ARGS, $PLAYER, $ARG:NUMBER)
+#    command 2 (placeholders : $ARGS, $PLAYER, $ARG:NUMBER)
+#    ... etc
+#
+#  type=send title
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    title (placeholders : $ARGS, $PLAYER, $RECEIVER, $ARG:NUMBER)
+#    subtitle (placeholders : $ARGS, $PLAYER, $RECEIVER, $ARG:NUMBER)
+#    fadein in ticks
+#    duration in ticks
+#    fadeout in ticks
+#
+#  type=send actionbar
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    the action bar (placeholders : $ARGS, $PLAYER, $RECEIVER, $ARG:NUMBER)
+#
+#  type=give item
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    the item name (when you saved it with /ccmd saveitem [name])
+#
+#  type=teleport
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    the location name (when you saved it with /ccmd saveloc [name])
+#
+#  type=change gamemode
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    the gameplay id (0 = survival, 1 = creative, 2 = adventure, 3 = spectator (1.8+))
+#
+#  type=change tab
+#  data=/
+#    target ('player', 'everyone', '$ARG:[NUMBER]')
+#    header
+#    footer
+#
+#----------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------
+# Example 1 : a simple command that overrides the existing spawn commands
+#----------------------------------------------------------------------------------------------------
+
+spawn=
+  
+  # Aliases : the command can be used with /spawn or /gotospawn
+  aliases=/
+    spawn
+	gotospawn
+  
+  # Description : command description
+  description=go to the spawn
+  
+  # Permission : the players will need to have the permission to use the command
+  permission=myserver.permission.spawn
+  
+  # Perform : actions that will be performed when the player uses the command
+  perform=
+    1=
+      type=teleport
+      data=/
+        player
+        my_spawn_location
+    2=
+      type=send message
+      data=/
+        player
+        &aAlright $PLAYER, you're at spawn !
+  
+  # Children : this command doesn't need any child arguments, so the list is empty
+  children=/
+
+#----------------------------------------------------------------------------------------------------
+# Example 2 : a command that uses children to show informations about the server
+#----------------------------------------------------------------------------------------------------
+
+helpserver=
+
+  # Aliases : the command can be used with /helpserver
+  aliases=/
+    helpserver
+  
+  # Description : command description
+  description=get informations about the server
+  
+  # children
+  children=
+  
+    # First child : help about the PVP. The full command to type will be /helpserver pvp
+    1=
+      aliases=/
+        pvp
+      description=get informations about the pvp
+      perform=
+        1=
+          type=send message
+          data=/
+            player
+            &aThe PVP is active on our server, only in the dedicated PVP arena. You can join the battle with /pvp !
+            &7Thanks for using the /helpserver command.
+    
+    # Second child : help about the shop. The full command to type will be /helpserver shop OR /helpserver store
+    2=
+      aliases=/
+        shop
+        store
+      description=get informations about the shop
+      perform=
+        1=
+          type=send message
+          data=/
+            player
+            &aWe have a shop available to sell ranks or some cosmetic advantages, so you can support the server and help us to grow. It's located at www.our-website.com/shop
+            &7Thanks for using the /helpserver command.
+
+    # ... etc. You can add infinite children.
+
+#----------------------------------------------------------------------------------------------------
+# Example 3 : more complex command that uses children, parameters, and toggles.
+#----------------------------------------------------------------------------------------------------
+
+complex=
+  
+  # Aliases : the command can be used with /complex
+  aliases=/
+    complex
+  
+  # Description : command description
+  description=complex things PogChamp
+  
+  # Parameters
+  parameters=/
+    [string]
+  
+  # Parameters description
+  parameters_description=/
+    [param description]
+  
+  # Children
+  children=
+  
+    # First child. The full command to type will be /complex [param string] child_1 [param player]
+    1=
+      aliases=/
+        child1
+      description=1st complex child DansGame
+      parameters=/
+        [player]
+      parameters_description=/
+        [the target]
+      perform=
+        1=
+          type=send message
+          data=/
+            $ARG:3
+            &6Hello, $ARG:3. Technically, if everything went well, you receive this message !
+            &eHere's the string parameter : $ARG:1
+            &eAnd here's the integer parameter : $ARG:2
+    
+    # Second child. The full command to type will be /complex [param string] child_2, and this will display the help because we didn't specify perform=
+    2=
+      aliases=/
+        child2
+      description=2nd complex child cmonBruh
+      
+      # Children of /complex [param string] child_2
+      children=
+        
+        # First child of /complex [param string] child_2. The full command to type will be /complex [param integer] child_2 lastchild
+        1=
+          aliases=/
+            lastchild
+          description=the youngest child of the family Kappa
+          
+          # If toggle=true, you'll have to specify perform_toggle_false= and perform_toggle_true= instead of only one perform=
+          toggle=true
+          # If toggle_persistent=true, the toggle state will be kept for each player even after a server restart/reload
+          toggle_persistent=true
+          # Perform if toggle is false for the player
+          perform_toggle_false=
+            1=
+              type=send message
+              data=/
+                player
+                &fAnd now, the toggle has been toggled to &atrue &f!
+          # Perform if toggle is true for the player
+          perform_toggle_true=
+            1=
+              type=send message
+              data=/
+                player
+                &fAnd now, the toggle has been toggled to &cfalse &f!
