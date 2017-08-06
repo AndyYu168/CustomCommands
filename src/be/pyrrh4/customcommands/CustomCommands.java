@@ -149,25 +149,10 @@ public class CustomCommands extends PyrPlugin implements Listener
 
 					break;
 				}
-<<<<<<< HEAD
-=======
-
-				commands.add(new CustomCommand(usage, permission, aliases, patterns, actions));
-				log(Level.INFO, "Successfully registered custom command '" + key + "'");
-			}
-			catch (Exception exception)
-			{
-				exception.printStackTrace();
-				log(Level.WARNING, "Could not load custom command '" + key + "'.");
-<<<<<<< HEAD
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
-=======
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
 			}
 		}
 	}
 
-<<<<<<< HEAD
 	// ------------------------------------------------------------
 	// Static methods
 	// ------------------------------------------------------------
@@ -175,38 +160,6 @@ public class CustomCommands extends PyrPlugin implements Listener
 	public String replaceString(String string, Player sender, String[] args)
 	{
 		String fullArgs = "";
-=======
-		// Events
-
-		Bukkit.getPluginManager().registerEvents(this, this);
-
-		// Plugin's commands
-
-		getCommand("customcommands").setExecutor(this);
-		handler = new CommandHandler(this, "/ccmd", Core.getMessenger());
-
-		handler.addHelp("/pyr reload CustomCommands", "reload the plugin", "pyr.core.admin");
-		handler.addHelp("/customcommands saveitem [name]", "save an item", "customcommands.admin");
-		handler.addHelp("/customcommands saveloc [name]", "save a location", "customcommands.admin");
-
-		// Command /ccmd saveitem [name]
-
-		handler.addSubCommand(new CommandSubHandler(true, true, "customcommands.admin", new CommandArgumentsPattern("saveitem [string]"))
-		{
-			@Override
-			public void execute(CommandCallInfo call)
-			{
-				Player player = call.getSenderAsPlayer();
-				String name = call.getArgAsString(1);
-				ItemStack item = player.getItemInHand();
-
-				if (!Requires.stringAlphanumeric(name, player, "CustomCommands >>", "This name isn't alphanumeric!")) return;
-				if (!Requires.fileNotContains(dataFile, "items." + name, player, "CustomCommands >>", "This name is already taken!")) return;
-				if (!Requires.itemValid(item, player, "CustomCommands >>", "This item is invalid!")) return;
-<<<<<<< HEAD
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
-=======
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
 
 		if (args.length > 0) {
 			for (int i = 0; i < args.length; i++) {
@@ -219,22 +172,9 @@ public class CustomCommands extends PyrPlugin implements Listener
 			string = string.replace("$ARG:" + (i + 1), args[i].replace(" ", ""));
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 		string = string.replace("$PLAYER", sender.getName()).replace("$ARGS", fullArgs);
 		return string;
 	}
-=======
-=======
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
-		handler.addSubCommand(new CommandSubHandler(true, true, "customcommands.admin", new CommandArgumentsPattern("saveloc [string]"))
-		{
-			@Override
-			public void execute(CommandCallInfo call)
-			{
-				Player player = call.getSenderAsPlayer();
-				String name = call.getArgAsString(1);
->>>>>>> 9f485b6ff15b0c866706f84792d583c3b92a747d
 
 	public String getFullId(CustomArgument argument)
 	{
