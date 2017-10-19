@@ -1,0 +1,12 @@
+package be.pyrrh4.customcommands.command;
+
+public enum MatchResult
+{
+	PARAM_ERROR_NUMBER,
+	PARAM_ERROR_PLAYER,
+	PARAM_ERROR_PLAYER_OFFLINE,
+	PARAM_ERROR_STRING_SIZED,
+	PARAM_ERROR_MATCH,
+	NO_MATCH,
+	SUCCESS;
+}

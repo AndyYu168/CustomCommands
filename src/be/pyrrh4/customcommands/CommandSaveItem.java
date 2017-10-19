@@ -1,29 +1,14 @@
 package be.pyrrh4.customcommands;
 
-import java.util.ArrayList;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import be.pyrrh4.core.command.Argument;
+import be.pyrrh4.core.command.Arguments.Performer;
 import be.pyrrh4.core.command.CallInfo;
 import be.pyrrh4.core.util.Requires;
 
-@SuppressWarnings("deprecation")
-public class CommandSaveItem extends Argument
+public class CommandSaveItem implements Performer
 {
-	// ------------------------------------------------------------
-	// Constructor
-	// ------------------------------------------------------------
-
-	public CommandSaveItem(Argument parent, ArrayList<String> aliases, ArrayList<String> params, boolean playerOnly, boolean async, String permission, String description, ArrayList<String> paramsDescription) {
-		super(parent, aliases, params, playerOnly, async, permission, description, paramsDescription);
-	}
-
-	// ------------------------------------------------------------
-	// Override
-	// ------------------------------------------------------------
-
 	@Override
 	public void perform(CallInfo call)
 	{

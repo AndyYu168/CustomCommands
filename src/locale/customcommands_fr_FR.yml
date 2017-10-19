@@ -1,0 +1,13 @@
+# Locale : en_US
+
+# Messages
+
+messages:
+  error_number: '&4CustomCommands >> &c''$ERROR'' n''est pas un nombre valide !'
+  error_length: '&4CustomCommands >> &c''$ERROR'' dépasse la taille autorisée !'
+  error_alphanumeric: '&4CustomCommands >> &c''$ERROR'' n''est pas un nom alphanumérique.'
+  error_target: '&4CustomCommands >> &cLe joueur ''$PLAYER'' n''a pas pu être trouvé.'
+  error_usage: '&4CustomCommands >> &cCe n''est pas comme ça que vous êtes supposé utiliser la commande ! Usage: $USAGE'
+  error_name_taken: '&4CustomCommands >> &cCe nom est déjà pris !'
+  item_saved: '&2CustomCommands >> &aL''item a été sauvegardé sous le nom ''$NAME'' !'
+  location_saved: '&2CustomCommands >> &aL''endroit a été sauvegardé sous le nom ''$NAME'' !'

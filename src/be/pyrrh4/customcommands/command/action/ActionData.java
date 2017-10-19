@@ -2,7 +2,7 @@ package be.pyrrh4.customcommands.command.action;
 
 import java.util.ArrayList;
 
-import be.pyrrh4.core.storage.PMLConfiguration;
+import be.pyrrh4.core.storage.YMLConfiguration;
 
 public class ActionData
 {
@@ -13,7 +13,7 @@ public class ActionData
 	private String path, type;
 	private ArrayList<String> data;
 
-	public ActionData(PMLConfiguration file, String path)
+	public ActionData(YMLConfiguration file, String path)
 	{
 		this.path = path;
 		this.type = file.getString(path + ".type");

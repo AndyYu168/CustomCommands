@@ -13,10 +13,10 @@ import be.pyrrh4.core.Logger;
 import be.pyrrh4.core.Logger.Level;
 import be.pyrrh4.core.PyrPlugin;
 import be.pyrrh4.core.User;
-import be.pyrrh4.core.command.Argument;
+import be.pyrrh4.core.command.Arguments;
 import be.pyrrh4.core.command.CallInfo;
 import be.pyrrh4.core.command.Command;
-import be.pyrrh4.core.storage.PMLConfiguration;
+import be.pyrrh4.core.storage.YMLConfiguration;
 import be.pyrrh4.core.util.Pair;
 import be.pyrrh4.core.util.Utils;
 import be.pyrrh4.customcommands.command.CustomArgument;
@@ -59,12 +59,12 @@ public class CustomCommands extends PyrPlugin implements Listener
 	protected void init()
 	{
 		getSettings().autoUpdateUrl("https://www.spigotmc.org/resources/14363/");
-		getSettings().localeDefault("customcommands_en_US.pyrml");
+		getSettings().localeDefault("customcommands_en_US.yml");
 		getSettings().localeConfigName("locale");
 	}
 
 	@Override
-	protected void initPluginData() {
+	protected void initStorage() {
 		// Main data
 		mainData = Utils.getPluginData(Core.getDataStorage().getFile("customcommands.data"), new MainData());
 	}
@@ -90,7 +90,7 @@ public class CustomCommands extends PyrPlugin implements Listener
 	protected void enable()
 	{
 		// load custom commands
-		PMLConfiguration commands = Core.getRootStorage().getConfig(this, "customcommands_commands.pyrml", false);
+		YMLConfiguration commands = Core.getRootStorage().getConfig(this, "customcommands_commands.yml", false);
 
 		for (String path : commands.getKeysForSection("", false)) {
 			try {
@@ -106,13 +106,9 @@ public class CustomCommands extends PyrPlugin implements Listener
 		Bukkit.getPluginManager().registerEvents(this, this);
 
 		// plugin commands
-		Command command = new Command(this, Utils.asList("customcommands", "ccmd"), Utils.emptyList(), "customcommands", true, false, "customcommands.admin", "CustomCommands main command", Utils.emptyList());
-		Argument argSaveItem = new CommandSaveItem(command, Utils.asList("saveitem", "setitem"), Utils.asList(Argument.STRING), true, false, "customcommands.admin", "save an item", Utils.asList("[item id]"));
-		Argument argSaveLocation = new CommandSaveLocation(command, Utils.asList("savelocation", "saveloc", "setlocation", "setloc"), Utils.asList(Argument.STRING), true, false, "customcommands.admin", "save a location", Utils.asList("[location id]"));
-
-		// set children
-		command.addChild(argSaveItem);
-		command.addChild(argSaveLocation);
+		Command command = new Command(this, "customcommands", "ccmd", null);
+		command.addArguments(new Arguments("saveitem=setitem", "saveitem", "customcommands.admin", "save an item", true, new CommandSaveItem()));
+		command.addArguments(new Arguments("savelocation=setloc", "savelocation", "customcommands.admin", "save a location", true, new CommandSaveLocation()));
 	}
 
 	// ------------------------------------------------------------
@@ -207,7 +203,7 @@ public class CustomCommands extends PyrPlugin implements Listener
 		return action;
 	}
 
-	private void loadChild(PMLConfiguration config, String path, CustomArgument parent)
+	private void loadChild(YMLConfiguration config, String path, CustomArgument parent)
 	{
 		// settings
 		ArrayList<String> aliases = config.getList(path + ".aliases");

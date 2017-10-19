@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import be.pyrrh4.core.User;
-import be.pyrrh4.core.command.Argument;
 import be.pyrrh4.core.command.CallInfo;
 import be.pyrrh4.customcommands.CustomCommands;
 import be.pyrrh4.customcommands.PlayerData;
